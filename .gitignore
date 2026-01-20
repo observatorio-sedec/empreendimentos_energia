@@ -1,4 +1,5 @@
 etl_empreendimento_pequeno.py
-conexão.py
+conexao.py
 empreendimentos_pequenos.xlsx
 empreendimentos_grandes.xlsx
+.env
