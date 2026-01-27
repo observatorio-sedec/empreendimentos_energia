@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:16
+    image: postgres:18.1
     container_name: postgres_empreendimentos
     restart: always
     environment:
@@ -8,11 +8,11 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "5432:5432"
+      - "${DB_PORT}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
-      - scraper_net
+      - empreendimentos_scraper_net
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
       interval: 5s
@@ -20,23 +20,20 @@ services:
       retries: 5
 
   etl_empreendimentos:
-      build:
-        context: .
-        dockerfile: Dockerfile
-      image: etl_empreendimentos:latest
-      container_name: scraper_empreendimentos
-      env_file:
-        - .env
-      depends_on:
-        postgres:
-          condition: service_healthy
-      networks:
-        - scraper_net
+    build: .
+    image: etl_empreendimentos:latest
+    container_name: scraper_empreendimentos
+    command: ["python", "etl_empreendimentos_grandes.py"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - empreendimentos_scraper_net
 
 volumes:
   pgdata:
 
 networks:
-  scraper_net:
+  empreendimentos_scraper_net:
     driver: bridge
 

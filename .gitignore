@@ -3,3 +3,4 @@ conexao.py
 empreendimentos_pequenos.xlsx
 empreendimentos_grandes.xlsx
 .env
+.env.prod
