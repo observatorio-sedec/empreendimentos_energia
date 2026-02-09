@@ -1,6 +1,6 @@
 from etl_empreendimento_grandes import df_empreendimentos_grandes, df_empreendimentos_pequenos
 import psycopg2
-from conexão import conexao
+from conexao import conexao
 
 def executar_sql():
     
@@ -163,7 +163,7 @@ def executar_sql():
                 i['DscSubBacia'], 
                 i['DscMunicipios']
             )
-            for _, i in df_empreendimentos_grandes.iterrows()
+            for i in df_empreendimentos_grandes.iter_rows(named=True)
         ]
 
         cursor.executemany(inserindo_dados_consumidores, dados_consumidores)
@@ -241,7 +241,7 @@ def executar_sql():
                 i['NumCoordESub'], 
                 i['NumCoordNSub']
             )
-            for _, i in df_empreendimentos_pequenos.iterrows()
+            for i in df_empreendimentos_pequenos.iter_rows(named=True)
         ]
 
         cursor.executemany(inserindo_dados_industrial, dados_industrial)
